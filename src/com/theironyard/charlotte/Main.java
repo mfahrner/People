@@ -20,18 +20,24 @@ public class Main {
 
         while (fileScanner.hasNext()) {
             String line = fileScanner.nextLine();
-            String[] columns = line.split("\\,");
+            String[] columns = line.split(",");
             Person filePeople = new Person(columns[0], columns[1], columns[2], columns[3], columns[4], columns[5]);
             arrayPerson.add(filePeople);
-            personHash.put(columns[4], arrayPerson);
+            // put if absent add empty arraylist as value of hashmap
+            // personHash.put(columns[4], arrayPerson);
             // I think this is storing properly?
             // tried to use .get to print specific "keys" but got one long array
             // could be a problem with the way I am calling
+            personHash.putIfAbsent(columns[4], new ArrayList<>());
+            personHash.get(columns[4]).add(filePeople);
+
         }
+        System.out.println(personHash);
 
 
 
-        System.out.println(personHash.get("China"));
+
+
 
 
 

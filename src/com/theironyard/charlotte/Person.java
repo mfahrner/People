@@ -29,7 +29,6 @@ public class Person {
        // Person p = (Person) o;
         // return lName.compareTo(p.lName);
     // }
-    // id,first_name,last_name,email,country,ip_address
 }
 
 
