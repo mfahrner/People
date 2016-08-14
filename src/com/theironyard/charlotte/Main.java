@@ -35,7 +35,7 @@ public class Main {
 
         // write Json
         JsonSerializer serializer = new JsonSerializer();
-        String jsonString = serializer.serialize(personHash);
+        String jsonString = serializer.include("*").serialize(personHash);
         try {
             FileWriter fw = new FileWriter(fjson);
             fw.write(jsonString);
