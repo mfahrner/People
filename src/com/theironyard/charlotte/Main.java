@@ -13,47 +13,32 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static HashMap<String, ArrayList<Person>> personHash = new HashMap<>();
+    public static HashMap<String, ArrayList<Person>> personHashMap = new HashMap<>();
 
     public static void main(String[] args) throws FileNotFoundException{
 	// write your code here
 
         File f = new File("people.txt");
-        File fjson = new File("people.json");
 
         Scanner fileScanner = new Scanner(f);
-
 
         while (fileScanner.hasNext()) {
             String line = fileScanner.nextLine();
             String[] columns = line.split(",");
+            // Person.inputFile(fileScanner.nextLine());
             Person filePeople = new Person(columns[0], columns[1], columns[2], columns[3], columns[4], columns[5]);
-            personHash.putIfAbsent(columns[4], new ArrayList<>());
-            personHash.get(columns[4]).add(filePeople);
-            Collections.sort(personHash.get(columns[4]));
+            personHashMap.putIfAbsent(columns[4], new ArrayList<>());
+            personHashMap.get(columns[4]).add(filePeople);
+            Collections.sort(personHashMap.get(columns[4]));
         }
 
-        // write Json
-        JsonSerializer serializer = new JsonSerializer();
-        String jsonString = serializer.include("*").serialize(personHash);
+        // I dont understand the need for the try catch block here when the method signature declares throws exception
         try {
-            FileWriter fw = new FileWriter(fjson);
-            fw.write(jsonString);
-            fw.close();
+            Person.saveJson(personHashMap);
         } catch (IOException e) {
 
         }
-        
-        System.out.println(personHash);
-
-
-
-
-
-
-
-
-
+        System.out.println(personHashMap);
 
     }
 }

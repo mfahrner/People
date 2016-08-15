@@ -1,15 +1,48 @@
 package com.theironyard.charlotte;
 
+import jodd.json.JsonSerializer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
 /**
  * Created by mfahrner on 8/11/16.
  */
-public class Person implements Comparable {
+public class Person implements Comparable  {
+    private static Scanner fileScanner;
     String id;
     String fName;
     String lName;
     String email;
     String country;
     String ip;
+
+
+
+    //public static String[] inputFile(String line) {
+      //  line = fileScanner.nextLine();
+     //   String[] columns = line.split(",");
+    //    return columns;
+    //}
+
+
+
+    public static void saveJson(HashMap <String, ArrayList<Person>> personHashMap) throws IOException {
+        JsonSerializer serializer = new JsonSerializer();
+        String jsonString = serializer.include("*").serialize(personHashMap);
+
+
+        File fjson = new File("people.json");
+        FileWriter fw = new FileWriter(fjson);
+        fw.write(jsonString);
+        fw.close();
+
+    }
 
     public Person(String id, String fName, String lName, String email, String country, String ip) {
         this.id = id;
