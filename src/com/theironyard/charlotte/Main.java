@@ -1,10 +1,7 @@
 package com.theironyard.charlotte;
 
-import jodd.json.JsonSerializer;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,19 +13,28 @@ public class Main {
     public static HashMap<String, ArrayList<Person>> personHashMap = new HashMap<>();
 
     public static void main(String[] args) throws FileNotFoundException{
-	// write your code here
 
         File f = new File("people.txt");
 
         Scanner fileScanner = new Scanner(f);
 
         while (fileScanner.hasNext()) {
+
             String line = fileScanner.nextLine();
             String[] columns = line.split(",");
+
+            // I tried to use commented out lines below to refactor the input lines on 26,27
+            // and creating Person object
+            // I couldn't figure out how to get them to work together.
+            // Conceptually i believe the columns are tripping me up
+
             // Person.inputFile(fileScanner.nextLine());
-            Person filePeople = new Person(columns[0], columns[1], columns[2], columns[3], columns[4], columns[5]);
+            // Person.createPerson(columns);
+
             personHashMap.putIfAbsent(columns[4], new ArrayList<>());
-            personHashMap.get(columns[4]).add(filePeople);
+
+            personHashMap.get(columns[4]).add(Person.createPerson(columns));
+
             Collections.sort(personHashMap.get(columns[4]));
         }
 
@@ -39,6 +45,5 @@ public class Main {
 
         }
         System.out.println(personHashMap);
-
     }
 }

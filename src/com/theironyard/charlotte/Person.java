@@ -3,7 +3,6 @@ package com.theironyard.charlotte;
 import jodd.json.JsonSerializer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,23 +21,29 @@ public class Person implements Comparable  {
     String country;
     String ip;
 
+    public static Person createPerson(String[] columns) {
+        return new Person(columns[0], columns[1], columns[2], columns[3], columns[4], columns[5]);
+    }
 
-
-    //public static String[] inputFile(String line) {
-      //  line = fileScanner.nextLine();
-     //   String[] columns = line.split(",");
+    // Attempt to refactor the lines 26, 27 from main
+    // public static String[] inputFile(String line) {
+    // line = fileScanner.nextLine();
+    //    String[] columns = line.split(",");
     //    return columns;
     //}
 
 
 
     public static void saveJson(HashMap <String, ArrayList<Person>> personHashMap) throws IOException {
+
         JsonSerializer serializer = new JsonSerializer();
         String jsonString = serializer.include("*").serialize(personHashMap);
 
 
         File fjson = new File("people.json");
+
         FileWriter fw = new FileWriter(fjson);
+
         fw.write(jsonString);
         fw.close();
 
@@ -106,6 +111,8 @@ public class Person implements Comparable  {
         return String.format("%s %s from %s\n", fName, lName, country);
     }
 
+
+    @Override
      public int compareTo(Object o) {
         Person p = (Person) o;
          return lName.compareTo(p.lName);
