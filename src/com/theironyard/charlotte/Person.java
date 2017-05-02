@@ -3,9 +3,11 @@ package com.theironyard.charlotte;
 import jodd.json.JsonSerializer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -13,28 +15,46 @@ import java.util.Scanner;
  * Created by mfahrner on 8/11/16.
  */
 public class Person implements Comparable  {
-    private static Scanner fileScanner;
-    String id;
-    String fName;
-    String lName;
-    String email;
-    String country;
-    String ip;
 
-    public static Person createPerson(String[] columns) {
+    private static Scanner fileScanner;
+    private String id;
+    private String fName;
+    private String lName;
+    private String email;
+    private String country;
+    private String ip;
+
+
+
+    public void personProject() throws FileNotFoundException {
+        File f = new File("people.txt");
+        Scanner fileScanner = new Scanner(f);
+        while (fileScanner.hasNext()) {
+
+            String line = fileScanner.nextLine();
+            String[] columns = line.split(",");
+
+            Main.personHashMap.putIfAbsent(columns[4], new ArrayList<>());
+
+            Main.personHashMap.get(columns[4]).add(createPerson(columns));
+
+            Collections.sort(Main.personHashMap.get(columns[4]));
+        }
+        try {
+            saveJson(Main.personHashMap);
+        } catch (IOException e) {
+            System.err.println();
+        }
+        System.out.println(Main.personHashMap);
+    }
+
+    public Person createPerson(String[] columns) {
         return new Person(columns[0], columns[1], columns[2], columns[3], columns[4], columns[5]);
     }
 
-    // Attempt to refactor the lines 26, 27 from main
-    // public static String[] inputFile(String line) {
-    // line = fileScanner.nextLine();
-    //    String[] columns = line.split(",");
-    //    return columns;
-    //}
 
 
-
-    public static void saveJson(HashMap <String, ArrayList<Person>> personHashMap) throws IOException {
+    public void saveJson(HashMap <String, ArrayList<Person>> personHashMap) throws IOException {
 
         JsonSerializer serializer = new JsonSerializer();
         String jsonString = serializer.include("*").serialize(personHashMap);
@@ -46,7 +66,9 @@ public class Person implements Comparable  {
 
         fw.write(jsonString);
         fw.close();
+    }
 
+    public Person() {
     }
 
     public Person(String id, String fName, String lName, String email, String country, String ip) {
